@@ -1,22 +1,9 @@
-*{
- margin: 0;
- padding: 0;
-}
-body{
- display:flex;
- flex-direction: column;
-}
-.header{
+.container{
  display: flex;
- justify-content: space-between;
- align-items: center;
- margin-left: 75px;
- margin-right: 75px;
+ gap: 10px;
 }
 
-.footer{
- display: flex;
- justify-content: center;
- align-items: center;
- margin-top: auto;
+.card{
+ background-color: cadetblue;
+ width: 200px;
 }

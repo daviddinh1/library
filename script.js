@@ -1,31 +1,50 @@
-const library = [];
+const myLibrary = [];
 
-function book(title,author,pages,read){
- //add constructors here
- this.title = title;
- this.author = author;
- this.pages = pages;
- this.read = read;
-
+function Book(title,author,pages,read){
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+    this.info = function(){
+        infoString = title+", "+author+", "+pages+", "+read;
+        return infoString;
+    }
 }
 
-function addBookToLibrary(book){
- //read book information
- library.push(book);
-
+function addBookToLibrary(object){ 
+    myLibrary.push(object); 
 }
 
-// work on thus tomorrow 
-function display(){
+const container = document.querySelector(".container");
+function display(myLibrary){
+    for(let i = 0; i<myLibrary.length;i++){
+        console.log(myLibrary[i]);
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.setAttribute('style', 'white-space: pre;');
 
+
+        card.textContent += myLibrary[i].title + "\r\n"; //I think later on you can fix this to ensure it looks better   
+        card.textContent += myLibrary[i].author + " \r\n";
+        card.textContent += myLibrary[i].pages + " \r\n";
+        card.textContent += myLibrary[i].read + " \r\n";
+
+
+        container.appendChild(card);
+
+    }
 }
 
-const book1 = new book("csm","david","100","read");
-const book2 = new book("lol","dad","120","unread");
+let hobbit = new Book("hobbit","david","200","read");
+let punpun = new Book("punpun","ben","200","unread");
+let vagabond = new Book("vagabond","boo","300","read");
 
-addBookToLibrary(book1);
-addBookToLibrary(book2);
 
-for(let i =0 ; i<library.length;i++){
- console.log(library[i]);
-}
+addBookToLibrary(hobbit);
+addBookToLibrary(punpun);
+addBookToLibrary(vagabond);
+
+
+display(myLibrary);
+
+
