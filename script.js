@@ -1,9 +1,9 @@
-const myLibrary = [];
+let myLibrary = [];
 function Book(title,author,pages,read){
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = read;
+    this.title = title,
+    this.author = author,
+    this.pages = pages,
+    this.read = read,
     this.info = function(){
         infoString = title+", "+author+", "+pages+", "+read;
         return infoString;
@@ -12,26 +12,41 @@ function Book(title,author,pages,read){
 
 function addBookToLibrary(object){ 
     myLibrary.push(object); 
+    console.log(myLibrary);
 }
-
-
 
 const container = document.querySelector(".container");
 function display(myLibrary,size){
     for(let i = size; i<myLibrary.length;i++){
-        console.log(myLibrary[i]);
+        //console.log(myLibrary[i]);
         const card = document.createElement('div');
         card.classList.add('card' + i);
         let removeBtn = document.createElement('button');
         removeBtn.textContent = "remove book";
-        removeBtn.setAttribute('id','btn' + i);
+        removeBtn.setAttribute('class','btn');
         removeBtn.setAttribute("type","submit");
+        removeBtn.dataset.indexNum = i;
+        
+        let readBtn = document.createElement('button');
+        readBtn.textContent = "click if read";
+        readBtn.setAttribute('class','readbtn');
+        readBtn.setAttribute("type","submit");
+        readBtn.dataset.readNum = i;
+
         card.setAttribute('style', 'white-space: pre;');
+        
         card.textContent += myLibrary[i].title + "\r\n"; //I think later on you can fix this to ensure it looks better   
         card.textContent += myLibrary[i].author + " \r\n";
         card.textContent += myLibrary[i].pages + " \r\n";
-        card.textContent += myLibrary[i].read + " \r\n";
+        
+        let readPart = document.createElement('div');
+        readPart.textContent += myLibrary[i].read;
+        readPart.setAttribute('class','read' + i);
+
+        
+        card.appendChild(readPart);
         card.appendChild(removeBtn);
+        card.appendChild(readBtn);
         container.appendChild(card);
 
     }
@@ -68,7 +83,24 @@ function newBook(dialog,showButton,closeButton){ //works
 
         addBookToLibrary(newBook);
         display(myLibrary,size); //learn how to get last length index
-        size += 1;
+        changeRead();
+        removeBook();
+        console.log(size);
+
+        if(picked == false){ //the issue is the size? 
+            size += 1;
+        } else{
+
+            size = myLibrary.length-1;
+            console.log(size);
+
+            console.log("working");
+            display(myLibrary,size); //learn how to get last length index
+            picked = false;
+            size += 1; // reset the size back for logic to work one before to display it
+
+        }
+        
 
         e.preventDefault();
         dialog.close();
@@ -76,35 +108,52 @@ function newBook(dialog,showButton,closeButton){ //works
 }
 
 addBookToLibrary(hobbit);
-
-
-function removeBook(myLibrary){ 
-    let cardChose = document.querySelector('.card0');
-    let checker = document.querySelector("#btn0");
-    checker.addEventListener("click",()=> {
-        
-        container.removeChild(cardChose); //remove() removed everything removeChild removes the thing
-        myLibrary.slice(0); 
-        console.log(myLibrary);
-
-    });
-
-}
-
-newBook(dialog,showButton,closeButton);
-
-display(myLibrary,0);
-removeBook(myLibrary);
-
-
-
-/*
-addBookToLibrary(hobbit);
 addBookToLibrary(punpun);
 addBookToLibrary(vagabond);
-console.log(myLibrary); //its being added but the val not working :c
 
-display(myLibrary);
-*/
+
+let picked = false;
+function removeBook(){ //see how to remove based on index
+    let buttons = document.querySelectorAll(".btn");
+        buttons.forEach(button =>{
+            button.addEventListener("click",()=> {
+                let index = button.getAttribute("data-index-num");
+                let cardChose = document.querySelector('.card' + index);
+                container.removeChild(cardChose); //remove() removed everything removeChild removes the thing
+                myLibrary.splice(index); //removes it out of the arr now 
+                return picked = true;
+            });
+    });
+}
+
+function changeRead(){
+    let buttons = document.querySelectorAll(".readbtn");
+    buttons.forEach(button => {
+        button.addEventListener("click", ()=>{
+            let index = button.getAttribute("data-read-num");
+            let readDiv = document.querySelector('.read' + index);
+            console.log(readDiv);
+            if(myLibrary[index].read === "read"){
+                this.read = "unread";
+                readDiv.textContent = "unread";
+            }
+            else{
+                this.read = "read";
+                readDiv.textContent = "read";
+
+            }
+        });
+        
+        
+    });
+   
+}
+
+display(myLibrary,0);
+newBook(dialog,showButton,closeButton);
+changeRead();
+removeBook(); 
+
+
 
 
